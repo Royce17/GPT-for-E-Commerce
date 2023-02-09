@@ -12,22 +12,24 @@ def index():
     if request.method == "POST":
         animal = request.form["animal"]
         response = openai.Completion.create(
-            model="text-davinci-003",
+            model="davinci:ft-personal-2023-02-08-11-59-57",
             prompt=generate_prompt(animal),
             temperature=0,
             max_tokens=128,
         )
         for choice in response.choices:
             print(choice)
-        return redirect(url_for("index", result=response.choices[0].text))
+        return redirect(url_for("index", result=response.choices[0].text.rsplit("\\n")[0]))
+        # return redirect(url_for("index", result=response.choices[0].text)
 
     result = request.args.get("result")
     return render_template("index.html", result=result)
 
+
 def generate_prompt(animal):
-    # return """假设你是带货直播里的观众，你想问这个问题：这件衣服有多大？对方可能会回答："""
-    return animal
-    
+    prompt = animal + " ->"
+    print(prompt)
+    return prompt
 
 
 # def generate_prompt(animal):
