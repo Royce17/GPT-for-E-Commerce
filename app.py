@@ -12,15 +12,15 @@ def index():
     if request.method == "POST":
         animal = request.form["animal"]
         response = openai.Completion.create(
-            model="davinci:ft-personal-2023-02-08-11-59-57",
+            model="davinci:ft-personal-2023-02-10-06-40-47",
             prompt=generate_prompt(animal),
             temperature=0,
             max_tokens=128,
         )
         for choice in response.choices:
             print(choice)
-        return redirect(url_for("index", result=response.choices[0].text.rsplit("\\n")[0]))
-        # return redirect(url_for("index", result=response.choices[0].text)
+        # return redirect(url_for("index", result=response.choices[0].text.rsplit("\\n")[0]))
+        return redirect(url_for("index", result=response.choices[0].text))
 
     result = request.args.get("result")
     return render_template("index.html", result=result)
@@ -30,16 +30,3 @@ def generate_prompt(animal):
     prompt = animal + " ->"
     print(prompt)
     return prompt
-
-
-# def generate_prompt(animal):
-#     return """Suggest three names for an animal that is a superhero.
-
-# Animal: Cat
-# Names: Captain Sharpclaw, Agent Fluffball, The Incredible Feline
-# Animal: Dog
-# Names: Ruff the Protector, Wonder Canine, Sir Barks-a-Lot
-# Animal: {}
-# Names:""".format(
-#         animal.capitalize()
-#     )
